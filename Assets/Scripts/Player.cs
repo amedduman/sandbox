@@ -1,22 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
-    private void Awake()
-    {
-        DependencyProvider.Instance.Register(this);
-    }
-    
-    void Start()
-    {
-        
-    }
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
 
-    
-    void Update()
+
+    private void Awake()
     {
         
     }

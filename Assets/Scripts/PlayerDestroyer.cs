@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ClickCount : MonoBehaviour
+public class PlayerDestroyer : MonoBehaviour
 {
     Player player;
+    Player p2;
 
-    void Start()
+    void Awake()
     {
         player = DependencyProvider.Instance.Get<Player>();
+
+        Destroy(player.gameObject);
     }
 
     void Update()
@@ -17,6 +18,12 @@ public class ClickCount : MonoBehaviour
         {
             if(player == null) Debug.Log($"null");
             Destroy(player.gameObject);
+        }
+
+        if(Input.GetKeyDown(KeyCode.V)) 
+        {
+            Debug.Log($"log"); 
+            Player p = DependencyProvider.Instance.Get<Player>();
         }
     }
 }

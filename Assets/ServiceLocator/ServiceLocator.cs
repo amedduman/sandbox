@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Extensions;
 
 namespace Services
 {
@@ -21,6 +22,49 @@ namespace Services
             }
 
             Instance = this;
+
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            foreach (var serviceType in ReflectionService.GetAllAutoRegisteredServices())
+            {
+                if (IsRegistered(serviceType)) continue;
+                
+                if (serviceType.IsMonoBehaviour())
+                {
+                    FindOrCreateMonoService(serviceType);
+                }
+                else
+                {
+                    RegisterNewInstance(serviceType);
+                }
+            }
+        }
+
+        bool IsRegistered(Type t)
+        {
+            return Services.ContainsKey(t);
+        }
+
+        void RegisterNewInstance(Type serviceType)
+        {
+            Services[serviceType] = Activator.CreateInstance(serviceType);
+        }
+        
+        object FindOrCreateMonoService(Type serviceType)
+        {
+            var inGameService = FindObjectOfType(serviceType);
+            if (inGameService == null)
+            {
+                var newObject = new GameObject();
+                newObject.AddComponent(serviceType);
+                newObject.name = serviceType.Name;
+                inGameService = newObject.GetComponent(serviceType);
+            }
+            Services[serviceType] = inGameService;
+            return inGameService;
         }
 
         public void Register<TService>(TService service, bool safe = true) /*where TService : class, new()*/

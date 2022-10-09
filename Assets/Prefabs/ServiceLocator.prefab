@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6473379768985672928}
   - component: {fileID: 6473379768985672943}
-  - component: {fileID: 6627653108019359677}
   m_Layer: 0
   m_Name: ServiceLocator
   m_TagString: Untagged
@@ -45,16 +44,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c053eb6740343daba77e1d7f930d2d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6627653108019359677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6473379768985672942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01317467de041429aa5cb65742c8d9c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _service: {fileID: 6473379768985672943}

@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 using Services;
+using Attributes;
 
-public class InputManager : MonoBehaviour
+[AutoRegisteredService]
+public class InputManager : MonoBehaviour, IRegistrable
 {
     public event Action OnJumpButtonPressed;
     public event Action OnFirstLevelLoadButtonPressed;
     public event Action OnSecondLevelLoadButtonPressed;
-
 
     void Update()
     {
@@ -23,7 +24,6 @@ public class InputManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Debug.Log("right arrow");
             OnSecondLevelLoadButtonPressed?.Invoke();
         }
     }

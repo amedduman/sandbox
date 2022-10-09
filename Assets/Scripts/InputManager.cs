@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Services;
 
-public class InputManager : MonoService<InputManager>
+public class InputManager : MonoBehaviour
 {
     public event Action OnJumpButtonPressed;
     public event Action OnFirstLevelLoadButtonPressed;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoService<LevelManager>
+public class LevelManager : MonoBehaviour
 {
     InputManager _inputManager;
 

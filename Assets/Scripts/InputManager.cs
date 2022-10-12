@@ -1,10 +1,8 @@
 using System;
 using UnityEngine;
 using Services;
-using Attributes;
 
-[AutoRegisteredService]
-public class InputManager : MonoBehaviour, IRegistrable
+public class InputManager : MonoBehaviour
 {
     public event Action OnJumpButtonPressed;
     public event Action OnFirstLevelLoadButtonPressed;

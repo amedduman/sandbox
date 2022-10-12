@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Services;
 
-public class Cube : MonoBehaviour
+
+public class MyCube : MonoBehaviour
 {
     InputManager _inputManager;
 
-
-    void Awake()
-    {
-        // ServiceLocator.Instance.Register(this);
-    }
 
     void Start()
     {

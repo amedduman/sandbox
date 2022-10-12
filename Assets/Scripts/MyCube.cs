@@ -23,6 +23,6 @@ public class MyCube : MonoBehaviour
 
     public void CloseMe()
     {
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 }

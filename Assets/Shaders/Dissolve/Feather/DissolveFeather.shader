@@ -1,4 +1,4 @@
-Shader "Custom-Unlit/Dissolve"
+Shader "Custom-Unlit/DissolveFeather"
 {
     Properties
     {
@@ -6,7 +6,6 @@ Shader "Custom-Unlit/Dissolve"
         _MaskTex ("Mask Texture", 2D) = "white" {}
         _Appear ("Appear", Range(0,1)) = 1
         _Feather ("Feather", Range(0,1)) = 1
-        _Color ("Color", Color) = (1,1,1,1)
         [Enum(UnityEngine.Rendering.BlendMode)]
         _SrcFactor ("Src Factor", Float) = 5
         [Enum(UnityEngine.Rendering.BlendMode)]
@@ -35,7 +34,6 @@ Shader "Custom-Unlit/Dissolve"
             float4 _MaskTex_ST;
             float _Appear;
             float _Feather;
-            float4 _Color;
 
             struct appdata // mesh data
             {
@@ -63,15 +61,8 @@ Shader "Custom-Unlit/Dissolve"
             {
                 float4 col = tex2D(_MainTex, i.uv);
                 float4 maskCol = tex2D(_MaskTex, i.mask_uv);
-                // float smothMask = smoothstep(maskCol.r - _Feather, maskCol.r + _Feather, _Appear);
-                float maskInner = maskCol.r >= _Appear + _Feather;
-                // return maskInner;
-                float maskOuter = maskCol.r >= _Appear - _Feather;
-                // return maskOuter;
-                float maskDiff = maskOuter - maskInner;
-                // return maskDiff;
-                col = lerp(float4(1,1,1,0), col ,maskCol.r >= _Appear);
-                return lerp(col, _Color, maskDiff);
+                float smothMask = smoothstep(maskCol.r - _Feather, maskCol.r + _Feather, _Appear);
+                return smothMask * col;
             }
             
             ENDCG

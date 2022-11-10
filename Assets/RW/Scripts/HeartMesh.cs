@@ -1,33 +1,3 @@
-/*
- * Copyright (c) 2019 Razeware LLC
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * Notwithstanding the foregoing, you may not use, copy, modify, merge, publish, 
- * distribute, sublicense, create a derivative work, and/or sell copies of the 
- * Software in any work that is designed, intended, or marketed for pedagogical or 
- * instructional purposes related to programming, coding, application development, 
- * or information technology.  Permission for such use, copying, modification,
- * merger, publication, distribution, sublicensing, creation of derivative works, 
- * or sale is expressly withheld.
- *    
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
-*/
-
 using System;
 using UnityEngine;
 using System.Collections;
@@ -61,6 +31,13 @@ public class HeartMesh : MonoBehaviour
     public List<int> selectedIndices = new List<int>();
     public float pickSize = 0.01f;
 
+    public float radiusOfEffect = 0.3f; //1 
+    public float pullValue = 0.3f; //2
+    public float duration = 1.2f; //3
+    int currentIndex = 0; //4
+    bool isAnimate = false;
+    float startTime = 0f;
+    float runTime = 0f;
 
 
     void Start()
@@ -72,6 +49,9 @@ public class HeartMesh : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         isMeshReady = false;
+
+        currentIndex = 0;
+
 
         if (isEditMode)
         {
@@ -97,21 +77,85 @@ public class HeartMesh : MonoBehaviour
             {
                 modifiedVertices[i] = originalVertices[i];
             }
+
+            StartDisplacement();
         }
 
     }
 
     public void StartDisplacement()
     {
+        targetVertex = originalVertices[selectedIndices[currentIndex]]; //1
+        startTime = Time.time; //2
+        isAnimate = true;
+
     }
+
+    protected void FixedUpdate()
+    {
+        if (!isAnimate)
+        {
+            return;
+        }
+
+        runTime = Time.time - startTime;
+
+        if (runTime < duration)
+        {
+            Vector3 targetVertexPos =
+                meshFilter.transform.InverseTransformPoint(targetVertex);
+            DisplaceVertices(targetVertexPos, pullValue, radiusOfEffect);
+        }
+        else
+        {
+            currentIndex++;
+            if (currentIndex < selectedIndices.Count)
+            {
+                StartDisplacement();
+            }
+            else
+            {
+                originalMesh = GetComponent<MeshFilter>().mesh;
+                isAnimate = false;
+                isMeshReady = true;
+            }
+        }
+    }
+
 
 
     void DisplaceVertices(Vector3 targetVertexPos, float force, float radius)
     {
+        Vector3 currentVertexPos = Vector3.zero;
+        float sqrRadius = radius * radius; //1
+
+        for (int i = 0; i < modifiedVertices.Length; i++) //2
+        {
+            currentVertexPos = modifiedVertices[i];
+            float sqrMagnitude = (currentVertexPos - targetVertexPos).sqrMagnitude; //3
+            if (sqrMagnitude > sqrRadius)
+            {
+                continue; //4
+            }
+            float distance = Mathf.Sqrt(sqrMagnitude); //5
+            float falloff = GaussFalloff(distance, radius);
+            Vector3 translate = (currentVertexPos * force) * falloff; //6
+            translate.z = 0f;
+            Quaternion rotation = Quaternion.Euler(translate);
+            Matrix4x4 m = Matrix4x4.TRS(translate, rotation, Vector3.one);
+            modifiedVertices[i] = m.MultiplyPoint3x4(currentVertexPos);
+        }
+        originalMesh.vertices = modifiedVertices; //7
+        originalMesh.RecalculateNormals();
+
     }
 
     public void ClearAllData()
     {
+        selectedIndices = new List<int>();
+        targetIndex = 0;
+        targetVertex = Vector3.zero;
+
     }
 
     public Mesh SaveMesh()

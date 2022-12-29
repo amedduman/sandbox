@@ -22,34 +22,40 @@ namespace Services
 
             Instance = this;
         }
-        public void Register<TService>(TService service, bool safe = true) /*where TService : class, new()*/
+        public void Register<TService>(TService service, bool IsSingleton) where TService : class, new()
         {
-            if (IsRegistered(service) && safe)
+            if (IsSingleton && IsRegistered(service))
             {
-                throw new ServiceLocatorException($"{service.GetType().Name} has been already registered.");
+                Debug.Break();
+                throw new ServiceLocatorException($"{service.GetType()} has already registered as singleton. " +
+                                                  $"Multiple registration of a singleton object is not allowed");
             }
             Services[service.GetType()] = service;
         }
 
-        public TService Get<TService>() where TService : class, new()
+        public void DeRegister <TService>(TService service) where TService : class, new()
         {
-            var serviceType = typeof(TService);
-            if (IsRegistered<TService>())
-            {
-                return (TService)Services[serviceType];
-            }
-
-            throw new ServiceLocatorException($"{serviceType.Name} hasn't been registered.");
+            Services.Remove(service.GetType());
         }
 
-        bool IsRegistered(object o)
+        public TService Get<TService>() where TService : class, new()
         {
-            return Services.ContainsKey(o.GetType());
+            if (IsRegistered<TService>())
+            {
+                return (TService)Services[typeof(TService)];
+            }
+            
+            Debug.Break();
+            throw new ServiceLocatorException($"{typeof(TService)} hasn't been registered.");
         }
 
         bool IsRegistered<TService>()
         {
             return Services.ContainsKey(typeof(TService));
+        }
+        bool IsRegistered<TService>(TService service)
+        {
+            return Services.ContainsKey(service.GetType());
         }
     }
 

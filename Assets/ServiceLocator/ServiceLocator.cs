@@ -25,13 +25,34 @@ namespace Services
         }
         public void Register<TService>(TService service) where TService : class, new()
         {
-            if (IsRegistered(service))
+            if (SingletonServices.TryGetValue(service.GetType(), out object srv))
             {
-                Debug.Break();
-                throw new ServiceLocatorException($"{service.GetType()} has already registered as singleton. " +
-                                                  $"Multiple registration of a singleton object is not allowed");
+                if (IsNullOrDestroyed(srv))
+                {
+                    SingletonServices[service.GetType()] = service;
+                }
+                else
+                {
+                    Debug.Break();
+                    throw new ServiceLocatorException($"{service.GetType()} has already registered as singleton. " +
+                                                      $"Multiple registration of a singleton object is not allowed");
+                }
             }
-            SingletonServices[service.GetType()] = service;
+            else
+            {
+                SingletonServices[service.GetType()] = service;
+            }
+            // else
+            // {
+            //     SingletonServices[service.GetType()] = service;
+            // }
+            // if (IsRegistered(service))
+            // {
+            //     Debug.Break();
+            //     throw new ServiceLocatorException($"{service.GetType()} has already registered as singleton. " +
+            //                                       $"Multiple registration of a singleton object is not allowed");
+            // }
+            // SingletonServices[service.GetType()] = service;
         }
         
         public void Register<TService>(TService service, string myTag) where TService : Component
@@ -67,10 +88,10 @@ namespace Services
             return false;
         }
 
-        public void DeRegister <TService>(TService service) where TService : class, new()
-        {
-            SingletonServices.Remove(service.GetType());
-        }
+        // public void DeRegister <TService>(TService service) where TService : class, new()
+        // {
+        //     SingletonServices.Remove(service.GetType());
+        // }
 
         public TService Get<TService>() where TService : class, new()
         {

@@ -8,6 +8,6 @@ public class ExtendedMB : MonoBehaviour
     
     protected void OnDestroy()
     {
-        MyAutoRegisterer.DestroyProcess();
+        // MyAutoRegisterer.DestroyProcess();
     }
 }

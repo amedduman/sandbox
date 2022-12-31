@@ -247,7 +247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isSingleton: 0
-  _singletonCmp: {fileID: 0}
   _cmp: {fileID: 50387102}
   _tag: cube_1
 --- !u!1 &1269380992
@@ -283,7 +282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isSingleton: 0
-  _singletonCmp: {fileID: 0}
   _cmp: {fileID: 1269380997}
   _tag: sphere_1
 --- !u!135 &1269380994
@@ -398,7 +396,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isSingleton: 0
-  _singletonCmp: {fileID: 0}
   _cmp: {fileID: 1526154926}
   _tag: cube_2
 --- !u!65 &1526154923
@@ -565,7 +562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51036dd5bee7243f294514cd405d053a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyAutoRegisterer: {fileID: 0}
 --- !u!4 &2055703283
 Transform:
   m_ObjectHideFlags: 0
@@ -594,6 +590,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isSingleton: 1
-  _singletonCmp: {fileID: 2055703282}
   _cmp: {fileID: 2055703282}
   _tag: 

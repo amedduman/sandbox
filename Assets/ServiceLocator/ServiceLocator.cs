@@ -36,7 +36,35 @@ namespace Services
         
         public void Register<TService>(TService service, string myTag) where TService : Component
         {
-            Services[myTag] = service;
+            if (Services.ContainsKey(myTag))
+            {
+                if (IsNullOrDestroyed(Services[myTag]))
+                {
+                    Services[myTag] = service;
+                }
+                else
+                {
+                    Debug.Break();
+                    throw new ServiceLocatorException(
+                        $"{service.GetType()} has already registered with the tag \"{myTag}\"");
+                }
+            }
+            else
+            {
+                Services[myTag] = service;
+            }
+            
+        }
+        
+        bool IsNullOrDestroyed(System.Object obj) 
+        {
+            if (ReferenceEquals(obj, null)) 
+                return true;
+            
+            if (obj is UnityEngine.Object) 
+                return (obj as UnityEngine.Object) == null;
+            
+            return false;
         }
 
         public void DeRegister <TService>(TService service) where TService : class, new()
@@ -61,11 +89,8 @@ namespace Services
             {
                 return (TService)srv;
             }
-            else
-            {
-                Debug.Break();
-                throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{myTag}\" hasn't been registered.");
-            }
+            Debug.Break();
+            throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{myTag}\" hasn't been registered.");
         }
 
         bool IsRegistered<TService>()

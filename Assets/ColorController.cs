@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColorController : MonoBehaviour/*ExtendedMB*/
+public class ColorController : MonoBehaviour
 {
     public void ChangeColor(Renderer rnd)
     {

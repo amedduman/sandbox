@@ -42,17 +42,6 @@ namespace Services
             {
                 SingletonServices[service.GetType()] = service;
             }
-            // else
-            // {
-            //     SingletonServices[service.GetType()] = service;
-            // }
-            // if (IsRegistered(service))
-            // {
-            //     Debug.Break();
-            //     throw new ServiceLocatorException($"{service.GetType()} has already registered as singleton. " +
-            //                                       $"Multiple registration of a singleton object is not allowed");
-            // }
-            // SingletonServices[service.GetType()] = service;
         }
         
         public void Register<TService>(TService service, string myTag) where TService : Component
@@ -74,7 +63,6 @@ namespace Services
             {
                 Services[myTag] = service;
             }
-            
         }
         
         bool IsNullOrDestroyed(System.Object obj) 
@@ -88,20 +76,18 @@ namespace Services
             return false;
         }
 
-        // public void DeRegister <TService>(TService service) where TService : class, new()
-        // {
-        //     SingletonServices.Remove(service.GetType());
-        // }
-
         public TService Get<TService>() where TService : class, new()
         {
-            if (IsRegistered<TService>())
+            if (SingletonServices.TryGetValue(typeof(TService), out object srv))
             {
-                return (TService)SingletonServices[typeof(TService)];
+                return (TService)srv;
             }
-            
             Debug.Break();
             throw new ServiceLocatorException($"{typeof(TService)} hasn't been registered.");
+            // if (IsRegistered<TService>())
+            // {
+            //     return (TService)SingletonServices[typeof(TService)];
+            // }
         }
         
         public TService Get<TService>(string myTag) where TService : Component
@@ -114,14 +100,14 @@ namespace Services
             throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{myTag}\" hasn't been registered.");
         }
 
-        bool IsRegistered<TService>()
-        {
-            return SingletonServices.ContainsKey(typeof(TService));
-        }
-        bool IsRegistered<TService>(TService service)
-        {
-            return SingletonServices.ContainsKey(service.GetType());
-        }
+        // bool IsRegistered<TService>()
+        // {
+        //     return SingletonServices.ContainsKey(typeof(TService));
+        // }
+        // bool IsRegistered<TService>(TService service)
+        // {
+        //     return SingletonServices.ContainsKey(service.GetType());
+        // }
     }
 
     public class ServiceLocatorException : Exception

@@ -265,8 +265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872af7525b0804cd496a3f613d2f7be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cmp: {fileID: 842916617}
   _isSingleton: 1
+  _singletonCmp: {fileID: 842916617}
+  _cmp: {fileID: 842916617}
+  _tag: 
 --- !u!1 &1098986673
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Services;
 using UnityEngine;
 
@@ -9,11 +6,8 @@ public class AutoRegister : MonoBehaviour
 {    
     [SerializeField] bool _isSingleton;
 
-    // [ShowIf(nameof(_isSingleton), true)]
-    // [SerializeField] ExtendedMB _singletonCmp;
-    
-    // [ShowIf(nameof(_isSingleton), false)]
     [SerializeField] Component _cmp;
+    
     [ShowIf(nameof(_isSingleton), false)]
     [SerializeField] string _tag;
     
@@ -21,7 +15,6 @@ public class AutoRegister : MonoBehaviour
     {
         if (_isSingleton)
         {
-            // _singletonCmp.MyAutoRegisterer = this;
             ServiceLocator.Instance.Register(_cmp); 
         }
         else
@@ -29,9 +22,4 @@ public class AutoRegister : MonoBehaviour
             ServiceLocator.Instance.Register(_cmp, _tag); 
         }
     }
-
-    // public void DestroyProcess()
-    // {
-    //     ServiceLocator.Instance.DeRegister(_singletonCmp);
-    // }
 }

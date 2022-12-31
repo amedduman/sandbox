@@ -84,10 +84,6 @@ namespace Services
             }
             Debug.Break();
             throw new ServiceLocatorException($"{typeof(TService)} hasn't been registered.");
-            // if (IsRegistered<TService>())
-            // {
-            //     return (TService)SingletonServices[typeof(TService)];
-            // }
         }
         
         public TService Get<TService>(string myTag) where TService : Component
@@ -99,20 +95,10 @@ namespace Services
             Debug.Break();
             throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{myTag}\" hasn't been registered.");
         }
-
-        // bool IsRegistered<TService>()
-        // {
-        //     return SingletonServices.ContainsKey(typeof(TService));
-        // }
-        // bool IsRegistered<TService>(TService service)
-        // {
-        //     return SingletonServices.ContainsKey(service.GetType());
-        // }
     }
 
     public class ServiceLocatorException : Exception
     {
         public ServiceLocatorException(string message) : base(message) { }
     }
-
 }

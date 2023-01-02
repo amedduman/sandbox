@@ -9,7 +9,7 @@ namespace Services
     {
         public static ServiceLocator Instance { get; private set;} = null;
         readonly Dictionary<Type, object> SingletonServices = new Dictionary<Type, object>();
-        private readonly Dictionary<string, object> Services = new Dictionary<string, object>();
+        private readonly Dictionary<SerLocID, object> Services = new Dictionary<SerLocID, object>();
 
         void Awake()
         {
@@ -44,24 +44,24 @@ namespace Services
             }
         }
         
-        public void Register<TService>(TService service, string myTag) where TService : Component
+        public void Register<TService>(TService service, SerLocID id) where TService : Component
         {
-            if (Services.ContainsKey(myTag))
+            if (Services.ContainsKey(id))
             {
-                if (IsNullOrDestroyed(Services[myTag]))
+                if (IsNullOrDestroyed(Services[id]))
                 {
-                    Services[myTag] = service;
+                    Services[id] = service;
                 }
                 else
                 {
                     Debug.Break();
                     throw new ServiceLocatorException(
-                        $"{service.GetType()} has already registered with the tag \"{myTag}\"");
+                        $"{service.GetType()} has already registered with the tag \"{id}\"");
                 }
             }
             else
             {
-                Services[myTag] = service;
+                Services[id] = service;
             }
         }
         
@@ -86,14 +86,14 @@ namespace Services
             throw new ServiceLocatorException($"{typeof(TService)} hasn't been registered.");
         }
         
-        public TService Get<TService>(string myTag) where TService : Component
+        public TService Get<TService>(SerLocID id) where TService : Component
         {
-            if (Services.TryGetValue(myTag, out object srv))
+            if (Services.TryGetValue(id, out object srv))
             {
                 return (TService)srv;
             }
             Debug.Break();
-            throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{myTag}\" hasn't been registered.");
+            throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{id}\" hasn't been registered.");
         }
     }
 

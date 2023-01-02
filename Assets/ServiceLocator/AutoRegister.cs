@@ -3,13 +3,17 @@ using UnityEngine;
 
 [DefaultExecutionOrder(-10000)]
 public class AutoRegister : MonoBehaviour
-{    
+{
     [SerializeField] bool _isSingleton;
 
     [SerializeField] Component _cmp;
     
+    // [ShowIf(nameof(_isSingleton), false)]
+    // [SerializeField] string _tag;
+    
     [ShowIf(nameof(_isSingleton), false)]
-    [SerializeField] string _tag;
+    [SearchableEnum]
+    [SerializeField] SerLocID _id;
     
     void Awake()
     {
@@ -19,7 +23,7 @@ public class AutoRegister : MonoBehaviour
         }
         else
         {
-            ServiceLocator.Instance.Register(_cmp, _tag); 
+            ServiceLocator.Instance.Register(_cmp, _id); 
         }
     }
 }

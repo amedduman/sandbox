@@ -248,7 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isSingleton: 0
   _cmp: {fileID: 50387102}
-  _tag: cube_1
+  _id: 10
 --- !u!1 &1269380992
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isSingleton: 0
   _cmp: {fileID: 1269380997}
-  _tag: sphere_1
+  _id: 30
 --- !u!135 &1269380994
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isSingleton: 0
   _cmp: {fileID: 1526154926}
-  _tag: cube_2
+  _id: 20
 --- !u!65 &1526154923
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -591,4 +591,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isSingleton: 1
   _cmp: {fileID: 2055703282}
-  _tag: 
+  _id: 0

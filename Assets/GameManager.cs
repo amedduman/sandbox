@@ -21,16 +21,16 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Destroy(ServiceLocator.Instance.Get<Cube>("cube_1").gameObject);
+            Destroy(ServiceLocator.Instance.Get<Cube>(SerLocID.cube1).gameObject);
         }
         
         if (Input.GetKeyDown(KeyCode.B))
         {
-            Destroy(ServiceLocator.Instance.Get<Cube>("cube_2").gameObject);
+            Destroy(ServiceLocator.Instance.Get<Cube>(SerLocID.cube2).gameObject);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            Destroy(ServiceLocator.Instance.Get<Transform>("sphere_1").gameObject);
+            Destroy(ServiceLocator.Instance.Get<Transform>(SerLocID.sphere).gameObject);
         }
     }
 }

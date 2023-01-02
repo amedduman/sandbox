@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Services;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
@@ -16,7 +13,7 @@ public class Cube : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            ServiceLocator.Instance.Get<ColorController>().ChangeColor(GetComponent<Renderer>());            
+            ServiceLocator.Get<ColorController>().ChangeColor(GetComponent<Renderer>());            
         }
     }
 }

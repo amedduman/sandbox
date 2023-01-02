@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Services
-{
     [DefaultExecutionOrder(-100000)]
     public class ServiceLocator : MonoBehaviour
-    {
-        public static ServiceLocator Instance { get; private set;} = null;
+    { 
+        static ServiceLocator _instance { get; set;} = null;
         readonly Dictionary<Type, object> SingletonServices = new Dictionary<Type, object>();
         private readonly Dictionary<SerLocID, object> Services = new Dictionary<SerLocID, object>();
 
         void Awake()
         {
-            if (Instance != null)
+            if (_instance != null)
             {
                 Debug.LogError($"Found duplicate {nameof(ServiceLocator)} on {gameObject.name}");
                 Destroy(gameObject);
@@ -21,15 +19,15 @@ namespace Services
                 return;
             }
 
-            Instance = this;
+            _instance = this;
         }
-        public void Register<TService>(TService service) where TService : class, new()
+        public static void Register<TService>(TService service) where TService : class, new()
         {
-            if (SingletonServices.TryGetValue(service.GetType(), out object srv))
+            if (_instance.SingletonServices.TryGetValue(service.GetType(), out object srv))
             {
                 if (IsNullOrDestroyed(srv))
                 {
-                    SingletonServices[service.GetType()] = service;
+                    _instance.SingletonServices[service.GetType()] = service;
                 }
                 else
                 {
@@ -40,17 +38,17 @@ namespace Services
             }
             else
             {
-                SingletonServices[service.GetType()] = service;
+                _instance.SingletonServices[service.GetType()] = service;
             }
         }
         
-        public void Register<TService>(TService service, SerLocID id) where TService : Component
+        public static void Register<TService>(TService service, SerLocID id) where TService : Component
         {
-            if (Services.ContainsKey(id))
+            if (_instance.Services.ContainsKey(id))
             {
-                if (IsNullOrDestroyed(Services[id]))
+                if (IsNullOrDestroyed(_instance.Services[id]))
                 {
-                    Services[id] = service;
+                    _instance.Services[id] = service;
                 }
                 else
                 {
@@ -61,11 +59,11 @@ namespace Services
             }
             else
             {
-                Services[id] = service;
+                _instance.Services[id] = service;
             }
         }
         
-        bool IsNullOrDestroyed(System.Object obj) 
+        static bool IsNullOrDestroyed(System.Object obj) 
         {
             if (ReferenceEquals(obj, null)) 
                 return true;
@@ -76,9 +74,9 @@ namespace Services
             return false;
         }
 
-        public TService Get<TService>() where TService : class, new()
+        public static TService Get<TService>() where TService : class, new()
         {
-            if (SingletonServices.TryGetValue(typeof(TService), out object srv))
+            if (_instance.SingletonServices.TryGetValue(typeof(TService), out object srv))
             {
                 return (TService)srv;
             }
@@ -86,9 +84,9 @@ namespace Services
             throw new ServiceLocatorException($"{typeof(TService)} hasn't been registered.");
         }
         
-        public TService Get<TService>(SerLocID id) where TService : Component
+        public static TService Get<TService>(SerLocID id) where TService : Component
         {
-            if (Services.TryGetValue(id, out object srv))
+            if (_instance.Services.TryGetValue(id, out object srv))
             {
                 return (TService)srv;
             }
@@ -101,4 +99,3 @@ namespace Services
     {
         public ServiceLocatorException(string message) : base(message) { }
     }
-}

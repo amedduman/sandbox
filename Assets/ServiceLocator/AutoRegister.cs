@@ -1,4 +1,3 @@
-using Services;
 using UnityEngine;
 
 [DefaultExecutionOrder(-10000)]
@@ -19,11 +18,11 @@ public class AutoRegister : MonoBehaviour
     {
         if (_isSingleton)
         {
-            ServiceLocator.Instance.Register(_cmp); 
+            ServiceLocator.Register(_cmp); 
         }
         else
         {
-            ServiceLocator.Instance.Register(_cmp, _id); 
+            ServiceLocator.Register(_cmp, _id); 
         }
     }
 }

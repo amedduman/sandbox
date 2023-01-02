@@ -91,7 +91,7 @@ using UnityEngine;
                 return (TService)srv;
             }
             Debug.Break();
-            throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the tag \"{id}\" hasn't been registered.");
+            throw new ServiceLocatorException($"An Instance of {typeof(TService)} with the <color=red>\"{id}\"</color> id hasn't been registered.");
         }
     }
 

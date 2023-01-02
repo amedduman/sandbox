@@ -266,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isSingleton: 1
   _cmp: {fileID: 842916617}
-  _tag: 
+  _id: 0
 --- !u!1 &1098986673
 GameObject:
   m_ObjectHideFlags: 0

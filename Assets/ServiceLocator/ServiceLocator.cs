@@ -54,7 +54,7 @@ using UnityEngine;
                 {
                     Debug.Break();
                     throw new ServiceLocatorException(
-                        $"{service.GetType()} has already registered with the tag \"{id}\"");
+                        $"You are trying to use same id for different objects. The id is <color=red>\"{id}\"</color>. The object you assigned with this id is <color=red>\"{(TService)_instance.Services[id]}\"</color> <color=yellow> You are trying to assign another object with this id. This is forbidden.</color> <color=green> Click to the error message see other object you are trying to assign.</color>");
                 }
             }
             else

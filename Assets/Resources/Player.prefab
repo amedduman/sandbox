@@ -375,3 +375,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpStrength: 10
+  _bulletPrefab: {fileID: 8205281850113811559, guid: 1b58d4d499aad4bc0ad7e03746634e24, type: 3}

@@ -7,6 +7,13 @@ public class PlayerSpawnController : MonoBehaviour
     
     void Start()
     {
-        PhotonNetwork.Instantiate(_playerPrefab.name, Vector3.zero, Quaternion.identity);
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(-9, 0, 0), Quaternion.identity);
+        }
+        else
+        {
+            PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(9, 0, 0), Quaternion.Euler(0, 180, 0));
+        }
     }
 }

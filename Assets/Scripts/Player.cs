@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 public class Player : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float _jumpStrength = 10;
+    [SerializeField] Bullet _bulletPrefab;
+    
     private Color _currentColor;
     Rigidbody _rb;
 
@@ -13,15 +15,6 @@ public class Player : MonoBehaviourPun, IPunObservable
     {
         _currentColor = GetComponentInChildren<Renderer>().material.color;
         _rb = GetComponent<Rigidbody>();
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            _rb.position = new Vector3(-10, 0, 0);
-        }
-        else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        {
-            _rb.position = new Vector3(10, 0, 0);
-        }
     }
 
     void Update()
@@ -31,6 +24,8 @@ public class Player : MonoBehaviourPun, IPunObservable
             Jump();
 
             ChangeColor();
+
+            Shoot();
         }
     }
 
@@ -54,6 +49,23 @@ public class Player : MonoBehaviourPun, IPunObservable
         {
             _rb.AddForce(Vector3.up * _jumpStrength, ForceMode.Impulse);
         }
+    }
+
+    void Shoot()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("clicked");
+            photonView.RPC(nameof(SpawnBullet), RpcTarget.Others);
+        }
+    }
+
+    [PunRPC]
+    void SpawnBullet()
+    {
+        Debug.Log("called");
+        var bullet = PhotonNetwork.Instantiate(_bulletPrefab.name, transform.position, Quaternion.identity).GetComponent<Bullet>();
+        bullet.Direction = transform.right;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

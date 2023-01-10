@@ -10,10 +10,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _connectedPnl;
     [SerializeField] private GameObject _disconnectedPnl;
     [SerializeField] private TMP_InputField _roomNameInputField;
-    
-    
+    [SerializeField] private TMP_InputField _playerNameInputField;
+
+
     public void OnClick_ConnectToServer()
     {
+        if (string.IsNullOrEmpty(_playerNameInputField.text)) return;
+        PhotonNetwork.NickName = _playerNameInputField.text;
         _connectPnl.SetActive(false);
         PhotonNetwork.ConnectUsingSettings();
     }

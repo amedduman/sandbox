@@ -1,4 +1,5 @@
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 
 public class PlayerSpawnController : MonoBehaviour
@@ -13,7 +14,7 @@ public class PlayerSpawnController : MonoBehaviour
         }
         else
         {
-            PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(9, 0, 0), Quaternion.Euler(0, 180, 0));
+            var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(9, 0, 0), Quaternion.Euler(0, 180, 0));
         }
     }
 }

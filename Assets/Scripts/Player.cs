@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,14 +8,28 @@ public class Player : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float _jumpStrength = 10;
     [SerializeField] Bullet _bulletPrefab;
+    [SerializeField] LayerMask _groundlayer;
+    [SerializeField] TMP_Text _playerNameText;
+        
     
     private Color _currentColor;
     Rigidbody _rb;
 
     private void Awake()
     {
+        if (photonView.IsMine)
+        {
+            _playerNameText.text = PhotonNetwork.NickName;
+        }
+        else
+        {
+            _playerNameText.text = GetComponent<PhotonView>().Owner.NickName;
+        }
         _currentColor = GetComponentInChildren<Renderer>().material.color;
         _rb = GetComponent<Rigidbody>();
+        
+        if(transform.position.x > 0)
+            _playerNameText.transform.localRotation = Quaternion.Euler(0, 180, 0);
     }
 
     void Update()
@@ -47,15 +62,22 @@ public class Player : MonoBehaviourPun, IPunObservable
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.AddForce(Vector3.up * _jumpStrength, ForceMode.Impulse);
+            if(IsGrounded())
+                _rb.AddForce(Vector3.up * _jumpStrength, ForceMode.Impulse);
         }
+    }
+
+    private bool IsGrounded()
+    {
+        if (Physics.CheckSphere(transform.position, .2f, _groundlayer))
+            return true;
+        return false;
     }
 
     void Shoot()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("clicked");
             photonView.RPC(nameof(SpawnBullet), RpcTarget.Others);
         }
     }
@@ -63,7 +85,6 @@ public class Player : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void SpawnBullet()
     {
-        Debug.Log("called");
         var bullet = PhotonNetwork.Instantiate(_bulletPrefab.name, transform.position, Quaternion.identity).GetComponent<Bullet>();
         bullet.Direction = transform.right;
     }
